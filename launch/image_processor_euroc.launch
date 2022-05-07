@@ -1,0 +1,5 @@
+<launch>
+  <node name="image_processor_node" pkg="my_msckf" type="image_processor_node" output="screen"/>
+  <node name="vio_node" pkg="my_msckf" type="vio_node" output="screen"/>
+  <rosparam command="load" file="$(find my_msckf)/config/camchain-imucam-euroc.yaml"/>
+</launch>
