@@ -17,6 +17,7 @@ namespace my_msckf {
 
 
 using FeatureIdType = unsigned long long; 
+using FrameIdType = unsigned long long; 
 struct Feature
 {
   FeatureIdType id;
@@ -86,6 +87,7 @@ private:
 
 
   FeatureIdType next_feature_id;
+	FrameIdType next_frame_id;
 
   cv::Matx33d R_cam0_imu;
   cv::Vec3d   t_cam0_imu;

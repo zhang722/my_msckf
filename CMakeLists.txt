@@ -34,15 +34,28 @@ catkin_package()
 
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(Ceres REQUIRED)
 
-include_directories(${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
+include_directories(
+	${catkin_INCLUDE_DIRS}
+ 	${EIGEN3_INCLUDE_DIR}
+	${CERES_INCLUDE_DIRS}
+)
 
 # Image processor node
 add_executable(image_processor_node image_processor.cpp)
 
-target_link_libraries(image_processor_node ${catkin_LIBRARIES} ${OpenCV_LIBS}) 
+target_link_libraries(image_processor_node 
+	${catkin_LIBRARIES} 
+	${OpenCV_LIBS}
+) 
 
 # Vio node
 add_executable(vio_node vio.cpp feature.cpp)
  
-target_link_libraries(vio_node ${catkin_LIBRARIES} ${OpenCV_LIBS}) 
+target_link_libraries(vio_node 
+	${catkin_LIBRARIES} 
+	${OpenCV_LIBS}
+	${CERES_LIBRARIES}
+) 
+

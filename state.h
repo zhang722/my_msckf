@@ -15,9 +15,9 @@ struct IMUState {
 	double      time;
 
 	// IMU state
+	Eigen::Vector4d q;
 	Eigen::Vector3d p;
 	Eigen::Vector3d v;
-	Eigen::Vector4d q;
 
 	Eigen::Vector3d bg;
   Eigen::Vector3d ba;
@@ -50,12 +50,18 @@ using CamStateServer = std::map<StateIdType, CamState,
 	std::pair<const StateIdType, CamState>>>;
 
 struct StateServer {
-  IMUState       imu_state;
-  CamStateServer cam_states;
+  IMUState       imu;
+  CamStateServer cam;
 
 	// State covariance matrix
 	Eigen::MatrixXd state_cov;
 	Eigen::Matrix<double, 12, 12> continuous_noise_cov;
+
+	constexpr static double gyro_bias_cov = 1e-4;
+	constexpr static double acc_bias_cov = 1e-2;
+	constexpr static double velocity_cov = 0.25;
+	constexpr static double extrinsic_rotation_cov = 3.0462e-4;
+	constexpr static double extrinsic_translation_cov = 1e-4;
 };
 
 } // namespace my_msckf

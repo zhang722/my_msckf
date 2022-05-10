@@ -50,6 +50,7 @@ ImageProcessor::ImageProcessor()
   t_cam0_imu = -R_imu_cam0.t() * t_imu_cam0;
 
   next_feature_id = 0;
+	next_frame_id = 0;
   is_first_img = true;
 
 
@@ -366,13 +367,14 @@ void ImageProcessor::add_new_features(const cv::Mat & img)
 void ImageProcessor::img_callback(const sensor_msgs::ImageConstPtr& cam_img)
 {
   cv::Mat image;
-  cam0_curr_img_ptr = cv_bridge::toCvShare(cam_img, sensor_msgs::image_encodings::MONO8);
+  cam0_curr_img_ptr = 
+		cv_bridge::toCvShare(cam_img, sensor_msgs::image_encodings::MONO8);
 
   create_pyramids(cam0_curr_img_ptr, curr_cam0_pyramid_);
   image = cam0_curr_img_ptr->image;
 
-  if( cam0_curr_img_ptr->image.type()!= CV_8U)
-         cv::cvtColor( cam0_curr_img_ptr->image, image, cv::COLOR_BGR2GRAY);
+  if ( cam0_curr_img_ptr->image.type()!= CV_8U)
+    cv::cvtColor( cam0_curr_img_ptr->image, image, cv::COLOR_BGR2GRAY);
   
   if (is_first_img) {
     init_first_frame(image);
@@ -448,6 +450,7 @@ void ImageProcessor::publish(ros::Publisher & frame_pub)
 
   my_msckf::FrameMsg m;
   m.header.stamp = cam0_curr_img_ptr->header.stamp;
+	m.id = next_frame_id ++;
 
   GridFeatures & curr_features = *curr_features_ptr;
   for (auto& c : curr_features) {
